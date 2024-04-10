@@ -1,5 +1,9 @@
-import HomePage from './home-page'
+import { HomePage } from './home-page'
 
-export default function Home() {
-  return <HomePage />
+export default function Page() {
+  return (
+    <>
+      <HomePage />
+    </>
+  )
 }

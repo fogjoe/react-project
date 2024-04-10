@@ -1,6 +1,5 @@
-export function getPageTitle(title?: string): string {
+export const getPageTitle =(title?: string) => {
   const mainTitle = 'Apifox UI'
 
   return title ? `${title} - ${mainTitle}` : mainTitle
 }
-

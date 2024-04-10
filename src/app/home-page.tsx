@@ -1,21 +1,20 @@
 'use client'
 
-import React, { memo } from 'react'
+import { SideNav } from '@/components/SideNav'
+import { theme } from 'antd'
 
-function HomeCotent() {
+export function HomeContent() {
+  const { token } = theme.useToken()
+
   return (
-    <div className="flex h-full">
-      <div>HomeCotent</div>
+    <div className="flex h-full" style={{ backgroundColor: token.colorBgContainer }}>
+      <SideNav />
+
+      <div className="relative w-full overflow-hidden"></div>
     </div>
   )
 }
 
-const HomePage = memo(() => {
-  return (
-    <div>
-      <HomeCotent />
-    </div>
-  )
-})
-
-export default HomePage
+export function HomePage() {
+  return <HomeContent />
+}
