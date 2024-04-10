@@ -1,8 +1,11 @@
-import { Form, Radio } from 'antd'
+import { Form, Radio, theme } from 'antd'
 import { ThemeSetting } from '.'
+import { defaultThemeSetting } from './theme-data'
 import { ThemePicker } from './ThemePicker'
 import { ThemeColorPicker } from './ThemeColorPicker'
 import { ThemeRadiusPicker } from './ThemeRadiusPicker'
+import { useEffect } from 'react'
+import { storeThemeSetting } from './ThemeEditor.helper'
 
 interface ThemeEditorProps {
   value?: ThemeSetting
@@ -10,9 +13,34 @@ interface ThemeEditorProps {
   autoSaveId?: string
 }
 
-export function ThemeEditor() {
+export function ThemeEditor(props: ThemeEditorProps) {
+  const { token } = theme.useToken()
+  const { borderRadius } = token
+
+  const { value, onChange, autoSaveId } = props
+
+  const [form] = Form.useForm<ThemeSetting>()
+
+  useEffect(() => {
+    const newThemeSetting = { ...defaultThemeSetting, ...value, borderRadius }
+
+    form.setFieldsValue(newThemeSetting)
+
+    if (autoSaveId) {
+      storeThemeSetting(autoSaveId, newThemeSetting)
+    }
+  }, [form, value, borderRadius, autoSaveId])
+
   return (
-    <Form>
+    <Form
+      form={form}
+      initialValues={value}
+      labelCol={{ span: 3 }}
+      wrapperCol={{ offset: 1, span: 20 }}
+      onValuesChange={(_, newThemeSetting) => {
+        onChange?.(newThemeSetting)
+      }}
+    >
       <Form.Item label="主题" name="themeMode">
         <ThemePicker />
       </Form.Item>

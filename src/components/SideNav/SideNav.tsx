@@ -2,6 +2,8 @@ import { Button, theme } from 'antd'
 import { Logo } from '@/components/icons/Logo'
 import { NavMenu } from './NavMenu'
 import { SettingFilled } from '@ant-design/icons'
+import { show } from '@ebay/nice-modal-react'
+import { ModalSettings } from '../modals/ModalSettings'
 
 export function SideNav() {
   const { token } = theme.useToken()
@@ -21,7 +23,14 @@ export function SideNav() {
       <NavMenu />
 
       <div className="mt-auto w-8 pb-4">
-        <Button icon={<SettingFilled />} style={{ color: token.colorTextTertiary }} type="text" />
+        <Button
+          icon={<SettingFilled />}
+          style={{ color: token.colorTextTertiary }}
+          type="text"
+          onClick={() => {
+            show(ModalSettings)
+          }}
+        />
       </div>
     </div>
   )

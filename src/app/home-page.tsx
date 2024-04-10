@@ -2,6 +2,7 @@
 
 import { SideNav } from '@/components/SideNav'
 import { theme } from 'antd'
+import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
 
 export function HomeContent() {
   const { token } = theme.useToken()
@@ -16,5 +17,9 @@ export function HomeContent() {
 }
 
 export function HomePage() {
-  return <HomeContent />
+  return (
+    <NiceModalProvider>
+      <HomeContent />
+    </NiceModalProvider>
+  )
 }
