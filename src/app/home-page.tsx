@@ -3,17 +3,22 @@
 import { SideNav } from '@/components/SideNav'
 import { Button, ConfigProvider, Dropdown, Flex, Tooltip, theme } from 'antd'
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
-import { PanelGroup, Panel } from 'react-resizable-panels'
+import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels'
 import { LayoutProvider, useLayoutContext } from '@/contexts/layout-settings'
 import { InputSearch } from '@/components/InputSearch'
 import { GlobalContextProvider } from '@/contexts/global'
 import { IconText } from '@/components/IconText'
-import { FilterIcon, PlusIcon } from 'lucide-react'
+import { ChevronRight, FilterIcon, PlusIcon } from 'lucide-react'
 import { MenuItemType } from '@/enums'
 import { API_MENU_CONFIG } from '@/configs/static'
-import { getCatalogType } from '@/helper'
+import { getCatalogType } from '@/helpers'
 import { useHelpers } from '@/hooks/useHelpers'
 import { FileIcon } from '@/components/icons/FileIcon'
+import { useStyles } from '@/hooks/useStyle'
+import { css } from '@emotion/css'
+import { FooterBar } from '@/components/FooterBar/FooterBar'
+import { ApiMenuContextProvider } from '@/components/ApiMenu/ApiMenuContext'
+import { ApiMenu } from '@/components/ApiMenu'
 
 export function HomeContent() {
   const { token } = theme.useToken()
@@ -21,6 +26,32 @@ export function HomeContent() {
   const { panelRef, isSideMenuCollapsed, setIsSideMenuCollapsed } = useLayoutContext()
 
   const { createTableItem } = useHelpers()
+
+  const { styles } = useStyles(({ token }) => {
+    const resizeHandleInner = css({
+      backgroundColor: token.colorBorderSecondary
+    })
+
+    return {
+      // 设置鼠标放到分割线上一级拖动时的颜色
+      resizeHandle: css({
+        [`:hover > .${resizeHandleInner}, &[data-resize-handle-state="hover"] > .${resizeHandleInner}, &[data-resize-handle-state="drag"] > .${resizeHandleInner}`]: {
+          backgroundColor: token.colorPrimary
+        }
+      }),
+
+      resizeHandleInner,
+
+      expandTrigger: css({
+        color: token.colorPrimary,
+        backgroundColor: token.colorFillAlter,
+        boxShadow: `1px solid rgba(16 24 40 / 0.08)`,
+        '&:hover': {
+          backgroundColor: token.colorFillSecondary
+        }
+      })
+    }
+  })
 
   return (
     <div className="flex h-full" style={{ backgroundColor: token.colorBgContainer }}>
@@ -81,13 +112,42 @@ export function HomeContent() {
                   }}
                 >
                   <Button type="primary">
-                    <IconText icon={<PlusIcon size={16} />} />
+                    <IconText icon={<PlusIcon size={18} />} />
                   </Button>
                 </Dropdown>
               </ConfigProvider>
             </Flex>
+
+            <div className="ui-menu flex-1 overflow-y-auto">
+              <ApiMenuContextProvider>
+                <ApiMenu />
+              </ApiMenuContextProvider>
+            </div>
+          </Panel>
+
+          <PanelResizeHandle className={`relative basis-[1px] ${styles.resizeHandle}`}>
+            <div className={`h-full w-[1px] ${styles.resizeHandleInner}`} />
+          </PanelResizeHandle>
+
+          <Panel className="relative flex h-full flex-1 flex-col overflow-y-auto overflow-x-hidden" minSize={50}>
+            <div className="flex-1 overflow-auto"></div>
+
+            <div className="shrink-0 basis-9" style={{ borderTop: `1px solid ${token.colorBorderSecondary}` }}>
+              <FooterBar />
+            </div>
           </Panel>
         </PanelGroup>
+
+        {isSideMenuCollapsed && (
+          <div
+            className={`absolute left-0 top-1/2 z-50 flex h-12 w-4 -translate-y-1/2 cursor-pointer items-center justify-center rounded-r-lg ${styles.expandTrigger}`}
+            onClick={() => {
+              panelRef.current?.expand()
+            }}
+          >
+            <ChevronRight size={12} strokeWidth={3} />
+          </div>
+        )}
       </div>
     </div>
   )

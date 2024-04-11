@@ -1,5 +1,8 @@
 import { CatalogType } from "@/enums";
 
+/** 服务 ID： 继承自父级。 */
+export const SERVER_INHERIT = ''
+
 export const API_MENU_CONFIG = {
   [CatalogType.Overview]: {
     title: '项目概况',
