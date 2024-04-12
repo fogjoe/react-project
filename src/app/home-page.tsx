@@ -1,7 +1,7 @@
 'use client'
 
 import { SideNav } from '@/components/SideNav'
-import { Button, ConfigProvider, Dropdown, Flex, Tooltip, theme } from 'antd'
+import { Button, ConfigProvider, Dropdown, Flex, Modal, Tooltip, message, theme } from 'antd'
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels'
 import { LayoutProvider, useLayoutContext } from '@/contexts/layout-settings'
@@ -154,11 +154,17 @@ export function HomeContent() {
 }
 
 export function HomePage() {
+  const [modal, modalContextHolder] = Modal.useModal()
+  const [messageApi, messageContextHolder] = message.useMessage({duration: 1})
+
   return (
     <LayoutProvider>
-      <GlobalContextProvider>
+      <GlobalContextProvider messageApi={messageApi} modal={modal}>
         <NiceModalProvider>
           <HomeContent />
+
+          {modalContextHolder}
+          {messageContextHolder}
         </NiceModalProvider>
       </GlobalContextProvider>
     </LayoutProvider>
