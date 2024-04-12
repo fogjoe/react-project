@@ -208,3 +208,5 @@ export function GlobalContextProvider(props: React.PropsWithChildren<{ modal: Mo
     </GlobalContext.Provider>
   )
 }
+
+export const useGlobalContext = () => useContext(GlobalContext)
