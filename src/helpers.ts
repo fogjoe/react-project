@@ -17,6 +17,15 @@ export function getCatalogType(type: MenuItemType): CatalogType {
   }
 }
 
+/** 判断是否为菜单文件夹类型。 */
+export function isMenuFolder(type: MenuItemType): boolean {
+  return (
+    type === MenuItemType.ApiDetailFolder ||
+    type === MenuItemType.ApiSchemaFolder ||
+    type === MenuItemType.RequestFolder
+  )
+}
+
 /** 递归查找目标菜单的父级文件夹 */
 export function findFolders(menuRawList: ApiMenuData[], folderMenus: ApiMenuData[], parentId: string): ApiMenuData[] {
   const res = menuRawList.find(item => item.id === parentId)

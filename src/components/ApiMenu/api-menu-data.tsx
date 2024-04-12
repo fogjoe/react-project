@@ -22,5 +22,5 @@ export function useMenuData(): MenuState {
 
   const menuTree: TreeProps['treeData'] = []
 
-  return {groupedMenus, menuTree}
+  return { groupedMenus, menuTree}
 }
