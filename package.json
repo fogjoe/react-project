@@ -15,6 +15,7 @@
     "@ebay/nice-modal-react": "^1.2.13",
     "@emotion/css": "^11.11.2",
     "antd": "^5.16.0",
+    "array-to-tree": "^3.3.2",
     "foxact": "^0.2.33",
     "immer": "^10.0.4",
     "lucide-react": "^0.366.0",

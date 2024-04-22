@@ -8,6 +8,14 @@ import { API_MENU_CONFIG } from '@/configs/static'
 import { FileIcon } from '../icons/FileIcon'
 import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react'
 import { HttpMethodText } from '../icons/HttpMethodText'
+import { ApiMenuTitle } from './ApiMenuTitle'
+import { FileAction } from './FileAction'
+import { FolderAction } from './FolderAction'
+
+/**
+ * 将菜单目录按照类型进行归类和组装
+ */
+const groupMenuByType = (menuData: CatalogDataNode[]) => {}
 
 const topMenus: CatalogType[] = [CatalogType.Overview, CatalogType.Http, CatalogType.Schema, CatalogType.Request, CatalogType.Recycle]
 
@@ -44,7 +52,7 @@ export function useMenuData(): MenuState {
    * 包含交互组件（即 React 组件）的菜单数据，需要传入到菜单树组件中使用
    * 注意：render prop 字段需要使用函数形式，否则会导致 deepClone 失败
    */
-  const menusWithRender: CatalogDataNode[] | undefined = useMemo(() => {
+  const menusWithRender: CatalogDataNode[] | undefined = useMemo(() =>
     menus?.map(item => {
       const catalog = item.customData.catalog
       const isHttp = catalog.type === MenuItemType.ApiDetail || catalog.type === MenuItemType.HttpRequest
@@ -72,12 +80,29 @@ export function useMenuData(): MenuState {
 
           return <span className="flex h-full items-center">{expanded ? <FolderOpenIcon size={14} /> : <FolderClosedIcon size={14} />}</span>
         },
+        title: (node) => {
+          <ApiMenuTitle actions={
+            item.isLeaf ? <FileAction catalog={catalog} /> : <FolderAction catalog={catalog} />
+          }
+            name={
+              catalog.type === MenuItemType.ApiDetail
+                ? apiDetailDisplay === 'name'
+                  ? catalog.name
+                  : catalog.data?.path || catalog.name
+                : catalog.name
+            }
+            node={node as CatalogDataNode} />
+        },
         className: item.isLeaf ? 'leaf-node' : undefined
       }
     })
-  }, [menus, apiDetailDisplay])
+    , [menus, apiDetailDisplay])
 
-  const groupedMenus: GroupedMenu | undefined = undefined
+  const groupedMenus: GroupedMenu | undefined = useMemo(() => {
+    if (menusWithRender) {
+      return groupMenuByType(menusWithRender)
+    }
+   }, [menusWithRender])
 
   const menuTree: TreeProps['treeData'] = []
 

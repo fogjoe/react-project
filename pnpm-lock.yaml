@@ -23,6 +23,9 @@ dependencies:
   antd:
     specifier: ^5.16.0
     version: 5.16.0(react-dom@18.2.0)(react@18.2.0)
+  array-to-tree:
+    specifier: ^3.3.2
+    version: 3.3.2
   foxact:
     specifier: ^0.2.33
     version: 0.2.33(react@18.2.0)
@@ -955,6 +958,14 @@ packages:
       get-intrinsic: 1.2.4
       is-string: 1.0.7
     dev: true
+
+  /array-to-tree@3.3.2:
+    resolution: {integrity: sha512-EmWeZgl7Kkb9eeaBi9GZq4X4wyxpW2UC8YsmSShx1cX19n7H1R59CszyC5+nERYgpCQi9EBSDgCZ9fWUyXCHyQ==}
+    engines: {node: '>=4'}
+    dependencies:
+      lodash.keyby: 4.6.0
+      nested-property: 0.0.7
+    dev: false
 
   /array-tree-filter@2.1.0:
     resolution: {integrity: sha512-4ROwICNlNw/Hqa9v+rk5h22KjmzB1JGTMVKP2AKJBOCgb0yL0ASf0+YvCcLNNwquOHNX48jkeZIJ3a+oOQqKcw==}
@@ -2634,6 +2645,10 @@ packages:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
     dev: false
 
+  /lodash.keyby@4.6.0:
+    resolution: {integrity: sha512-PRe4Cn20oJM2Sn6ljcZMeKgyhTHpzvzFmdsp9rK+6K0eJs6Tws0MqgGFpfX/o2HjcoQcBny1Eik9W7BnVTzjIQ==}
+    dev: false
+
   /lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: true
@@ -2961,6 +2976,10 @@ packages:
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
+
+  /nested-property@0.0.7:
+    resolution: {integrity: sha512-XamePAu09Y95kcimkF+CXDf69Iov+qaM+GyXCw5Ysoa8Q5r7RgehRn99bkxyYHpXs3ZcZdm7QyjRV52nYpNw5Q==}
+    dev: false
 
   /next@14.1.4(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-1WTaXeSrUwlz/XcnhGTY7+8eiaFvdet5z9u3V2jb+Ek1vFo0VhHKSAIJvDWfQpttWjnyw14kBeq28TPq7bTeEQ==}
