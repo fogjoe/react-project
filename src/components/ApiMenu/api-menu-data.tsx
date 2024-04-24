@@ -1,5 +1,5 @@
 import { CatalogType, MenuItemType } from '@/enums'
-import { TreeProps } from 'antd'
+import { TreeDataNode, TreeProps } from 'antd'
 import { ApiMenuData, CatalogDataNode } from './ApiMenu.types'
 import { useGlobalContext } from '@/contexts/global'
 import { useMemo } from 'react'
@@ -11,15 +11,58 @@ import { HttpMethodText } from '../icons/HttpMethodText'
 import { ApiMenuTitle } from './ApiMenuTitle'
 import { FileAction } from './FileAction'
 import { FolderAction } from './FolderAction'
+import { css } from '@emotion/css'
+import { useStyles } from '@/hooks/useStyle'
+import arrayToTree from 'array-to-tree'
+import { FolderIcon } from '../icons/FolderIcon'
+import { ApiMenuTitleTop } from './ApiMenuTitleTop'
+
+type GroupedMenu = Record<CatalogType, CatalogDataNode[]>
 
 /**
  * 将菜单目录按照类型进行归类和组装
  */
-const groupMenuByType = (menuData: CatalogDataNode[]) => {}
+const groupMenuByType = (menuData: CatalogDataNode[]) => {
+  return menuData.reduce<GroupedMenu>((res, catalogDataNode) => {
+    const catalog = catalogDataNode.customData.catalog
 
-const topMenus: CatalogType[] = [CatalogType.Overview, CatalogType.Http, CatalogType.Schema, CatalogType.Request, CatalogType.Recycle]
+    switch (catalog.type) {
+      case MenuItemType.ApiDetail:
+      case MenuItemType.ApiDetailFolder:
+      case MenuItemType.Doc:
+        res[CatalogType.Http].push(catalogDataNode)
+        break
 
-type GroupedMenu = Record<CatalogType, CatalogDataNode[]>
+      case MenuItemType.ApiSchema:
+      case MenuItemType.ApiSchemaFolder:
+        res[CatalogType.Schema].push(catalogDataNode)
+        break
+
+      case MenuItemType.HttpRequest:
+      case MenuItemType.RequestFolder:
+        res[CatalogType.Request].push(catalogDataNode)
+        break
+    }
+
+    return res
+  }, {
+    [CatalogType.Overview]: [],
+    [CatalogType.Http]: [],
+    [CatalogType.Schema]: [],
+    [CatalogType.Request]: [],
+    [CatalogType.Recycle]: [],
+    [CatalogType.Markdown]: [],
+  })
+}
+
+const topMenus: CatalogType[] = [
+  CatalogType.Overview,
+  CatalogType.Http,
+  CatalogType.Schema,
+  CatalogType.Request,
+  CatalogType.Recycle
+]
+
 
 export interface MenuState {
   groupedMenus?: GroupedMenu
@@ -53,13 +96,13 @@ export function useMenuData(): MenuState {
    * 注意：render prop 字段需要使用函数形式，否则会导致 deepClone 失败
    */
   const menusWithRender: CatalogDataNode[] | undefined = useMemo(() =>
-    menus?.map(item => {
+    menus?.map<CatalogDataNode>(item => {
       const catalog = item.customData.catalog
       const isHttp = catalog.type === MenuItemType.ApiDetail || catalog.type === MenuItemType.HttpRequest
 
       return {
         ...item,
-        icon: ({ expanded }: { expanded: boolean }) => {
+        icon: ({ expanded }) => {
           if (item.isLeaf) {
             if (isHttp) {
               return (
@@ -78,9 +121,12 @@ export function useMenuData(): MenuState {
             )
           }
 
-          return <span className="flex h-full items-center">{expanded ? <FolderOpenIcon size={14} /> : <FolderClosedIcon size={14} />}</span>
+          return (
+            <span className="flex h-full items-center">
+              {expanded ? <FolderOpenIcon size={14} /> : <FolderClosedIcon size={14} />}
+            </span>)
         },
-        title: (node) => {
+        title: (node) => (
           <ApiMenuTitle actions={
             item.isLeaf ? <FileAction catalog={catalog} /> : <FolderAction catalog={catalog} />
           }
@@ -92,19 +138,51 @@ export function useMenuData(): MenuState {
                 : catalog.name
             }
             node={node as CatalogDataNode} />
-        },
+        ),
         className: item.isLeaf ? 'leaf-node' : undefined
       }
-    })
-    , [menus, apiDetailDisplay])
+    }),
+    [menus, apiDetailDisplay]
+  )
 
   const groupedMenus: GroupedMenu | undefined = useMemo(() => {
     if (menusWithRender) {
       return groupMenuByType(menusWithRender)
     }
-   }, [menusWithRender])
+  }, [menusWithRender])
 
-  const menuTree: TreeProps['treeData'] = []
+  const { styles } = useStyles(({ token }) => {
+    return {
+      topFolder: css({
+        color: token.colorTextSecondary
+      })
+    }
+  })
+
+  const menuTree: TreeProps['treeData'] = useMemo(() => {
+    if (!groupedMenus) {
+      return
+    }
+
+    return topMenus.map<TreeDataNode>(catalogType => {
+      const treeData = arrayToTree(groupedMenus[catalogType], {
+        customID: 'key',
+        parentProperty: 'customData.catalog.parentId'
+      })
+
+      return {
+        key: catalogType,
+        icon: () => (
+          <span className='inline-flex size-full items-center justify-center'>
+            <FolderIcon size={15} type={catalogType} />
+          </span>
+        ),
+        title: () => <ApiMenuTitleTop topMenuType={catalogType} />,
+        children: treeData,
+        className: `top-folder ${styles.topFolder}`
+      }
+    })
+  }, [groupedMenus, styles.topFolder])
 
   return { groupedMenus, menuTree }
 }
