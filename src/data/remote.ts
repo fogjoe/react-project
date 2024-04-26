@@ -6,6 +6,7 @@ import { SERVER_INHERIT } from '@/configs/static'
 import { ApiStatus, CatalogType, ContentType, HttpMethod, MenuId, MenuItemType, ParamType } from '@/enums'
 import { findFolders } from '@/helpers'
 import type { ApiDetails, ApiSchema, Creator, RecycleData } from '@/types'
+import { ApiTabItem } from '@/components/ApiTab'
 
 const RESPONSE_ID_1 = nanoid(6)
 const RESPONSE_ID_2 = nanoid(6)
@@ -493,19 +494,42 @@ export const recycleGroupData: RecycleData = {
   }
 }
 
+export const initialTabItems: ApiTabItem[] = (() => {
+  return [
+    ...apiDirectoryData
+      .filter(({ id }) => {
+        return id === MenuId.示例接口 || id === MenuId.宠物店 || id === MenuId.查询宠物详情 || id === MenuId.SchemaPet || id === MenuId.引用模型
+      })
+      .map(({ id, name, type }) => {
+        return {
+          key: id,
+          label: name,
+          contentType: type
+        }
+      }),
+    {
+      key: 'newCatalog',
+      label: '新建...',
+      contentType: 'blank'
+    }
+  ]
+})()
+
 export const initialActiveTabKey = MenuId.查询宠物详情
 
-export const initialExpandedKeys: ApiMenuData['id'][] = [CatalogType.Http, CatalogType.Schema]
+export const initialExpandedKeys: ApiMenuData['id'][] = [
+  CatalogType.Http,
+  CatalogType.Schema,
+  ...initialTabItems.reduce<ApiMenuData['id'][]>((acc, { key }) => {
+    const target = apiDirectoryData.find(item => item.id === key)
 
-// ...initialTabItems.reduce<ApiMenuData['id'][]>((acc, { key }) => {
-//     const target = apiDirectoryData.find((item) => item.id === key)
+    if (target?.parentId) {
+      acc.push(...findFolders(apiDirectoryData, [], target.parentId).map(({ id }) => id))
+    }
 
-//     if (target?.parentId) {
-//       acc.push(...findFolders(apiDirectoryData, [], target.parentId).map(({ id }) => id))
-//     }
-
-//     return acc
-//   }, []),
+    return acc
+  }, [])
+]
 
 export const initialCreateApiDetailsData: ApiDetails = {
   id: nanoid(6),

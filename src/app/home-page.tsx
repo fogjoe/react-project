@@ -130,7 +130,9 @@ export function HomeContent() {
           </PanelResizeHandle>
 
           <Panel className="relative flex h-full flex-1 flex-col overflow-y-auto overflow-x-hidden" minSize={50}>
-            <div className="flex-1 overflow-auto"></div>
+            <div className="flex-1 overflow-auto">
+              {/* <ApiTab /> */}
+            </div>
 
             <div className="shrink-0 basis-9" style={{ borderTop: `1px solid ${token.colorBorderSecondary}` }}>
               <FooterBar />
