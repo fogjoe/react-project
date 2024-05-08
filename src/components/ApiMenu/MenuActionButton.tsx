@@ -1,7 +1,10 @@
-import { useStyles } from "@/hooks/useStyle"
-import { css } from "@emotion/css"
-import { theme } from "antd"
-import { forwardRef } from "react"
+import { forwardRef } from 'react'
+
+import { theme } from 'antd'
+
+import { useStyles } from '@/hooks/useStyle'
+
+import { css } from '@emotion/css'
 
 interface MenuActionButtonProps extends React.ComponentProps<'span'> {
   icon?: React.ReactNode
@@ -16,19 +19,20 @@ export const MenuActionButton = forwardRef<any, MenuActionButtonProps>(
     const { styles } = useStyles(({ token }) => ({
       icon: css({
         '&:hover': {
-          backgroundColor: token.colorFillSecondary
-        }
-      })
+          backgroundColor: token.colorFillSecondary,
+        },
+      }),
     }))
 
-    return <span
-      {...restSpanProps}
-      ref={ref}
-      className={`inline-flex h-full items-center p-[2px] px-1 ${className} ${styles.icon}`}
-      style={{ ...style, borderRadius: token.borderRadiusXS }}
-    >
-      {icon}
-    </span>
+    return (
+      <span
+        {...restSpanProps}
+        ref={ref}
+        className={`inline-flex h-full items-center p-[2px] px-1 ${className} ${styles.icon}`}
+        style={{ ...style, borderRadius: token.borderRadiusXS }}
+      >
+        {icon}
+      </span>
+    )
   }
-
-) 
+)

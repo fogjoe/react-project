@@ -1,8 +1,7 @@
-import type { MenuItemType } from '@/enums'
-import { ApiDetails, ApiDoc, ApiFolder, ApiSchema } from '@/types'
 import type { TreeProps } from 'antd'
 
-export type CatalogId = string
+import type { MenuItemType } from '@/enums'
+import type { ApiDetails, ApiDoc, ApiFolder, ApiSchema } from '@/types'
 
 export interface ApiMenuBase {
   id: CatalogId
@@ -36,10 +35,17 @@ interface ApiMenuRequest extends ApiMenuBase {
   data?: ApiDetails
 }
 
-export type ApiMenuData = ApiMenuInterface | ApiMenuSchema | ApiMenuDoc | ApiMenuRequest | ApiMenuInterfaceFolder
+export type CatalogId = string
 
-// treeData 是一个数组类型，但是我们只需要取到某一项的值类型
+export type ApiMenuData =
+  | ApiMenuInterface
+  | ApiMenuSchema
+  | ApiMenuDoc
+  | ApiMenuRequest
+  | ApiMenuInterfaceFolder
+
 export type TreeDataNode = NonNullable<TreeProps['treeData']>[0]
+
 export type CatalogDataNode = Omit<TreeDataNode, 'key'> & {
   key: string
   customData: {

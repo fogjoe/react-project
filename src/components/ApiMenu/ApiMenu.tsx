@@ -11,7 +11,7 @@ import { useStyles } from '@/hooks/useStyle'
 import { useMenuTabContext, useMenuTabHelpers } from '../../contexts/menu-tab-settings'
 import { PageTabStatus } from '../ApiTab/ApiTab.enum'
 
-import type { CatalogDataNode } from './ApiMenu.types'
+import type { CatalogDataNode } from './ApiMenu.type'
 import { useApiMenuContext } from './ApiMenuContext'
 import { SwitcherIcon } from './SwitcherIcon'
 

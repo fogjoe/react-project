@@ -58,3 +58,134 @@
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* 
+在这里设置 Design Token 无法影响到的样式。
+使用了 `tailwindcss/nesting` 预处理 CSS Nesting，参考：https://tailwindcss.com/docs/using-with-preprocessors#nesting
+*/
+
+.ui-menu {
+  .ant-tree.ant-tree-directory {
+    .ant-tree-switcher {
+      @apply flex justify-center items-center w-[15px];
+    }
+
+    .ant-tree-indent .ant-tree-indent-unit {
+      @apply w-[15px];
+    }
+
+    .ant-tree-node-content-wrapper {
+      @apply flex items-center w-0;
+    }
+
+    .ant-tree-treenode {
+      @apply mx-2;
+
+      &.top-folder {
+        &:not(:first-child) {
+          @apply mt-[6px];
+        }
+
+        & > .ant-tree-switcher {
+          @apply hidden;
+        }
+      }
+
+      .ant-tree-icon__customize {
+        @apply w-auto mr-1;
+      }
+    }
+
+    .ant-tree-title {
+      @apply flex-1 overflow-hidden;
+    }
+  }
+}
+
+.ant-tabs.ant-tabs-card {
+  > .ant-tabs-nav .ant-tabs-tab {
+    &:hover,
+    &.ant-tabs-tab-active {
+      color: currentcolor;
+
+      .ant-tabs-tab-btn {
+        color: currentcolor;
+      }
+    }
+  }
+
+  > .ui-tabs-nav.ant-tabs-nav .ant-tabs-tab {
+    &:hover,
+    &.ant-tabs-tab-active {
+      color: currentcolor;
+
+      .ant-tabs-tab-btn {
+        color: currentcolor;
+      }
+    }
+  }
+}
+
+.ui-tabs {
+  &.ant-tabs {
+    @apply h-full;
+
+    .ant-tabs-nav {
+      @apply pr-3;
+    }
+
+    .ui-tabs-nav {
+      > .ant-tabs-nav-wrap {
+        @apply mt-2;
+
+        .ant-tabs-tab:not(.ant-tabs-tab-active) {
+          border-color: transparent;
+
+          &::before {
+            position: absolute;
+            right: -4px;
+            width: 1px;
+            height: 24px;
+            content: '';
+          }
+        }
+
+        .ant-tabs-tab:hover {
+          .main-tabs-tab-close-icon {
+            opacity: 1;
+          }
+        }
+      }
+
+      .ant-tabs-nav-list {
+        @apply ml-2;
+      }
+
+      > .ant-tabs-nav {
+        @apply mt-0 h-12;
+
+        > .ant-tabs-nav-wrap {
+          @apply mt-2;
+        }
+      }
+    }
+
+    .api-details-tabs {
+      @apply h-full;
+
+      > .ant-tabs-nav {
+        @apply px-tabContent;
+      }
+    }
+
+    .ant-tabs-content-holder {
+      .ant-tabs-content {
+        @apply h-full overflow-auto;
+
+        .ant-tabs-tabpane {
+          @apply h-full;
+        }
+      }
+    }
+  }
+}

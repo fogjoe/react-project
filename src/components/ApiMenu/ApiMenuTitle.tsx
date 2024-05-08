@@ -1,21 +1,23 @@
-import React from 'react'
-import { CatalogDataNode } from '.'
 import { theme } from 'antd'
-import { isMenuFolder } from '@/helpers'
-import { DropdownActions } from './DropdownActions'
-import { AppMenuControls } from './AppMenuControls'
 
-// 计算叶子节点的数量，用于显示在菜单名称后面
+import { AppMenuControls } from '@/components/ApiMenu/AppMenuControls'
+import { DropdownActions } from '@/components/ApiMenu/DropdownActions'
+import { isMenuFolder } from '@/helpers'
+
+import type { CatalogDataNode } from './ApiMenu.type'
+
+/** 计算叶子节点的数量，用于显示在菜单名称后面。 */
 const countLeaf = (node: CatalogDataNode) => {
   let count = 0
 
-  node.children?.map(child => {
+  node.children?.forEach((child) => {
     if (child.isLeaf) {
       count += 1
     } else {
       count += countLeaf(child as CatalogDataNode)
     }
   })
+
   return count
 }
 
@@ -25,6 +27,9 @@ interface ApiMenuTitleProps {
   actions?: React.ReactNode
 }
 
+/**
+ * 普通菜单项标题。
+ */
 export function ApiMenuTitle(props: ApiMenuTitleProps) {
   const { token } = theme.useToken()
 
@@ -35,19 +40,21 @@ export function ApiMenuTitle(props: ApiMenuTitleProps) {
 
   const count = isFolder ? countLeaf(node) : null
 
-  return <DropdownActions catalog={catalog} isFolder={isFolder} trigger={['contextMenu']}>
-    <span className='flex h-full items-center truncate'>
-      <span className='felx items-center truncate pr-1'>
-        <span className='truncate'>{name}</span>
+  return (
+    <DropdownActions catalog={catalog} isFolder={isFolder} trigger={['contextMenu']}>
+      <span className="flex w-full items-center truncate">
+        <span className="flex items-center truncate pr-1">
+          <span className="truncate">{name}</span>
 
-        {
-          isFolder && count! > 0 && (<span className='ml-1 text-xs' style={{ color: token.colorPrimary }}>
-            {count}
-          </span>)
-        }
+          {isFolder && count! > 0 && (
+            <span className="ml-1 text-xs" style={{ color: token.colorTextTertiary }}>
+              ({count})
+            </span>
+          )}
+        </span>
+
+        <AppMenuControls>{actions}</AppMenuControls>
       </span>
-    </span>
-
-    <AppMenuControls>{actions}</AppMenuControls>
-  </DropdownActions>
+    </DropdownActions>
+  )
 }

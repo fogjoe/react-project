@@ -1,6 +1,8 @@
-import React, { createContext, useContext, useMemo, useState } from 'react'
-import { MenuState, useMenuData } from './api-menu-data'
+import { createContext, useContext, useMemo, useState } from 'react'
+
 import { initialExpandedKeys } from '@/data/remote'
+
+import { type MenuState, useMenuData } from './api-menu-data'
 
 interface ExpandedMenuKeysHelpers {
   addExpandedMenuKeys: (keys: string[]) => void
@@ -20,12 +22,12 @@ export function ApiMenuContextProvider(props: React.PropsWithChildren) {
 
   const expandHelpers = useMemo<ExpandedMenuKeysHelpers>(() => {
     return {
-      addExpandedMenuKeys: keys => {
-        setExpandedMenuKeys(k => Array.from(new Set([...k, ...keys])))
+      addExpandedMenuKeys: (keys) => {
+        setExpandedMenuKeys((k) => Array.from(new Set([...k, ...keys])))
       },
       removeExpandedMenuKeys: (keys) => {
-        setExpandedMenuKeys(k => k.filter(key => !keys.includes(key)))
-      }
+        setExpandedMenuKeys((k) => k.filter((key) => !keys.includes(key)))
+      },
     }
   }, [setExpandedMenuKeys])
 
@@ -34,7 +36,8 @@ export function ApiMenuContextProvider(props: React.PropsWithChildren) {
   return (
     <ApiMenuContext.Provider value={{ expandedMenuKeys, ...expandHelpers, ...menuState }}>
       {children}
-    </ApiMenuContext.Provider>)
+    </ApiMenuContext.Provider>
+  )
 }
 
 export const useApiMenuContext = () => useContext(ApiMenuContext)
