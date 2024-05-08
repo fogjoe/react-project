@@ -19,6 +19,8 @@ import { css } from '@emotion/css'
 import { FooterBar } from '@/components/FooterBar/FooterBar'
 import { ApiMenuContextProvider } from '@/components/ApiMenu/ApiMenuContext'
 import { ApiMenu } from '@/components/ApiMenu'
+import { ApiTab } from '@/components/ApiTab'
+import { MenuTabProvider } from '@/contexts/menu-tab-settings'
 
 export function HomeContent() {
   const { token } = theme.useToken()
@@ -131,7 +133,7 @@ export function HomeContent() {
 
           <Panel className="relative flex h-full flex-1 flex-col overflow-y-auto overflow-x-hidden" minSize={50}>
             <div className="flex-1 overflow-auto">
-              {/* <ApiTab /> */}
+              <ApiTab />
             </div>
 
             <div className="shrink-0 basis-9" style={{ borderTop: `1px solid ${token.colorBorderSecondary}` }}>
@@ -157,16 +159,17 @@ export function HomeContent() {
 
 export function HomePage() {
   const [modal, modalContextHolder] = Modal.useModal()
-  const [messageApi, messageContextHolder] = message.useMessage({duration: 1})
+  const [messageApi, messageContextHolder] = message.useMessage({ duration: 1 })
 
   return (
     <LayoutProvider>
       <GlobalContextProvider messageApi={messageApi} modal={modal}>
         <NiceModalProvider>
-          <HomeContent />
-
-          {modalContextHolder}
-          {messageContextHolder}
+          <MenuTabProvider>
+            <HomeContent />
+            {modalContextHolder}
+            {messageContextHolder}
+          </MenuTabProvider>
         </NiceModalProvider>
       </GlobalContextProvider>
     </LayoutProvider>

@@ -39,7 +39,7 @@ interface GlobalContextData extends MenuHelpers {
   menuRawList?: ApiMenuData[]
   recycleRawData?: RecycleData
   modal: ModalHookApi
-  messageApi?: MessageApi
+  messageApi: MessageApi
 
   menuSearchWord?: string
   setMenuSearchWord?: React.Dispatch<React.SetStateAction<GlobalContextData['menuSearchWord']>>

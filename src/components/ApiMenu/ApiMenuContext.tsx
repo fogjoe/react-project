@@ -31,7 +31,10 @@ export function ApiMenuContextProvider(props: React.PropsWithChildren) {
 
   const menuState = useMenuData()
 
-  return <ApiMenuContext.Provider value={{expandedMenuKeys, ...expandHelpers, ...menuState}}>{children}</ApiMenuContext.Provider>
+  return (
+    <ApiMenuContext.Provider value={{ expandedMenuKeys, ...expandHelpers, ...menuState }}>
+      {children}
+    </ApiMenuContext.Provider>)
 }
 
 export const useApiMenuContext = () => useContext(ApiMenuContext)

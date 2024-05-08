@@ -1,1 +1,2 @@
-export type { ApiTabItem, EditStatus} from './ApiTab.types'
+export { ApiTab } from './ApiTab'
+export type { ApiTabItem, EditStatus } from './ApiTab.type'

@@ -1,4 +1,4 @@
-import { SchemaType } from "./constants"
+import type { SchemaType } from './constants'
 
 export interface BaseSchema {
   name?: string
@@ -48,4 +48,3 @@ export interface ColumnType {
     }
   ) => React.ReactNode
 }
-
